@@ -1,0 +1,13 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Protection minimale : il faut être authentifié (l'appli connecte
+    // chaque visiteur en "anonyme" automatiquement) pour lire/écrire.
+    // Ce n'est PAS un vrai contrôle d'identité — envisagez Firebase Auth
+    // (Google restreint à @fenofootball.fr) si vous voulez restreindre
+    // vraiment l'écriture à l'équipe.
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
